@@ -1,0 +1,119 @@
+@page "/Encrypt"
+
+@using blazor3.providers;
+@inject ListData dataService;
+@inject IJSRuntime JsRuntime;
+<h1>Encrypt</h1>
+<div class="form-group">
+    @if (strkey.Length>0)
+    {
+        <div class="alert alert-success" role="alert">
+            File got it!!
+        </div>
+        
+    }else
+    {
+
+        <div class="alert alert-danger" role="alert">
+            File empty
+        </div>
+    }
+    <div class="custom-file">
+        <input type="file" @ref="inputkeyref" class="custom-file-input" id="customFileLang" lang="en" @onchange=changekey/>
+        <label class="custom-file-label" for="customFileLang">search Key</label>
+    </div>
+    
+    <br/>
+    <br/>
+    <br/>
+    @if (strkey.Length>0)
+    {
+        @if(dataService.lista.Count>0){
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <button class="btn bg-primary" @onclick=EncryptData>Encrypt</button>
+                </div>
+            </div>  
+        }
+        @if(swbol)
+        {
+            int i=-1;
+            <div class="form-group">
+                <label>New Line</label>
+                <input class="form-control" @bind="newline" />
+            </div>
+            <button class="btn bg-primary" @onclick="addLine">Add Line</button>
+            <ul class="list-group mt-3">
+                @foreach (var item in dataService.lista)
+                {
+                    i++;
+                    <li class="list-group-item">@i .-  @item 
+                        <span class="badge badge-danger badge-pill" @onclick="(()=>{removeLine(item);})">remove</span>
+                    </li>   
+                    
+            }        
+            </ul>
+        }
+            else
+            {
+                <textarea readonly class="form-control" @bind="strencrypt" rows="15"> 
+                
+                </textarea>
+            }  
+    }
+    
+    
+</div>
+
+@code{
+    ElementReference inputkeyref;
+    string strkey="";
+    bool swbol=true;
+    string strencrypt="";
+    string newline="";
+    /*protected override async Task OnInitAsync(){
+        
+    }*/
+    void removeLine(string item){
+        Console.WriteLine("item : " + item);
+        string aux=dataService.lista.First(p=>p.Equals(item));
+        dataService.lista.Remove(aux);
+    }
+    void addLine(){
+        if(newline.Length>0){
+            dataService.lista.Insert(0,newline);
+            newline="";
+        }
+        
+    }
+    async Task changekey(){
+        //await JsRuntime.InvokeAsync
+        //strkey = await Blazor3.Services.serviceInterop.GetFileData(inputkeyref);
+        
+        Console.WriteLine("inputkeyref : "+inputkeyref);
+        Console.WriteLine("Before strkey : "+strkey);
+        strkey =  await JsRuntime.InvokeAsync<string>("getFileData",inputkeyref);
+        Console.WriteLine("strkey : "+strkey);
+        
+        byte[] decodedBytes = Convert.FromBase64String(strkey);
+        strkey = System.Text.Encoding.UTF8.GetString(decodedBytes);
+        
+    }
+    void EncryptData(){
+        //System.Security.Cryptography.Aes
+        string plaintext=getPlainText();
+        strencrypt = dataService.Encrypt(plaintext,strkey);
+        swbol = !swbol;
+        dataService.lista = new List<string>();
+        
+    }
+    
+    private string getPlainText(){
+        string plaintext="";
+        foreach (string item in dataService.lista)
+        {
+            plaintext= plaintext+item+Environment.NewLine;
+        }
+        return plaintext;
+    }
+}

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using blazor3.Data;
+using blazor3.providers;
 
 namespace blazor3
 {
@@ -28,7 +29,9 @@ namespace blazor3
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+
             services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton<ListData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
