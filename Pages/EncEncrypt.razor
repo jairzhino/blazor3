@@ -42,7 +42,8 @@
                 <label>New Line</label>
                 <input class="form-control" @bind="newline" />
             </div>
-            <button class="btn bg-primary" @onclick="addLine">Add Line</button>
+            <button class="btn bg-primary text-white" @onclick="addLine">Add Line</button>
+            <button class="btn bg-danger text-white" @onclick="removeAll">Remove All Lines</button>
             <ul class="list-group mt-3">
                 @foreach (var item in dataService.lista)
                 {
@@ -53,13 +54,11 @@
                     
             }        
             </ul>
-        }
-            else
-            {
-                <textarea readonly class="form-control" @bind="strencrypt" rows="15"> 
-                
-                </textarea>
-            }  
+        }else
+        {
+            <textarea readonly class="form-control" @bind="strencrypt" rows="15"> 
+            </textarea>
+        }  
     }
     
     
@@ -85,6 +84,9 @@
             newline="";
         }
         
+    }
+    void removeAll(){
+        dataService.lista=new List<string>();
     }
     async Task changekey(){
         //await JsRuntime.InvokeAsync
