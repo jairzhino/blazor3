@@ -1,0 +1,55 @@
+@page "/View"
+
+@using blazor3.providers;
+@inject ListData dataService;
+@inject IJSRuntime JsRuntime;
+<h1>Encrypt and Decrypt</h1>
+
+<form>
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Key</label>
+    <input type="text" class='form-control @((strkey.Length==16? "" : "border border-danger"))' 
+    maxlength="16"  @bind="strkey" id="exampleFormControlInput1" 
+    placeholder="key 16 chars" />
+  </div>
+  <div class="form-group">
+      <div class="row">
+          <div class="col-md-6">
+              <button type="button" class="btn btn-success m-3" disabled="@(strkey.Length!=16)" @onclick=EncryptData>Encrypt</button>
+          </div>
+          <div class="col-md-6">
+              <button type="button" class="btn btn-warning m-3" disabled="@(strkey.Length!=16)" @onclick=DecryptData>Decrypt</button>
+          </div>
+      </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6 border bg-success">
+        <div class="card-body">
+            <label for="exampleFormControlTextarea1">Text Plain</label>
+            <textarea class="form-control m-3" @bind="plainText" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+        
+    </div>
+    <div class="form-group col-md-6 border bg-warning">
+        <div class="card-body">
+            <label for="exampleFormControlTextarea2">Text Encrypted</label>
+            <textarea class="form-control m-3" @bind="encryptedText" id="exampleFormControlTextarea2" rows="3"></textarea>
+        </div>
+        
+    </div>
+  </div>
+</form>
+
+@code{
+    public bool isDisabled {get; set;} = true;
+    public string strkey{get; set;} = "";
+    public string plainText{get; set;} = "";
+    public string encryptedText{get; set;} = "";
+
+    void EncryptData(){
+        encryptedText=dataService.Encrypt(plainText,strkey);
+    }
+    void DecryptData(){
+        plainText=dataService.Decrypt(encryptedText,strkey);
+    }
+} 
