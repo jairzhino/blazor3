@@ -21,10 +21,12 @@ namespace blazor3.providers
                 string strResult = "";
                 if (strkey.Length > 16)
                     strkey = strkey.Substring(0, 16);
-                byte[] key = System.Text.Encoding.UTF8.GetBytes(strkey);
                 string straux = "ADOTRMDWOD1QWELK";
+
+                byte[] key = System.Text.Encoding.UTF8.GetBytes(strkey);
                 byte[] IV = System.Text.Encoding.UTF8.GetBytes(straux);
                 byte[] encryptedText = base64tosArrayByte(plaintext);
+
                 using (var aes = System.Security.Cryptography.Aes.Create())
                 {
                     aes.IV = IV;
@@ -60,10 +62,12 @@ namespace blazor3.providers
                 string strResult = "";
                 if (strkey.Length > 16)
                     strkey = strkey.Substring(0, 16);
-                byte[] key = System.Text.Encoding.UTF8.GetBytes(strkey);
                 string straux = "ADOTRMDWOD1QWELK";
+
+                byte[] key = System.Text.Encoding.UTF8.GetBytes(strkey);
                 byte[] IV = System.Text.Encoding.UTF8.GetBytes(straux);
                 byte[] encrypted;
+                
                 using (var aes = System.Security.Cryptography.Aes.Create())
                 {
                     aes.IV = IV;
