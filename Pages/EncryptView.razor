@@ -3,7 +3,6 @@
 
 @using blazor3.providers;
 @inject ListData dataService;
-@inject IJSRuntime JsRuntime;
 <h1>Encrypt and Decrypt</h1>
 
 <form>
@@ -26,14 +25,14 @@
   <div class="row">
     <div class="form-group col-md-6 border bg-success">
         <div class="card-body">
-            <label for="exampleFormControlTextarea1">Text Plain</label>
+            <label for="exampleFormControlTextarea1">Plain Text</label>
             <textarea class="form-control m-3" @bind="plainText" id="exampleFormControlTextarea1" rows="3"></textarea>
         </div>
         
     </div>
     <div class="form-group col-md-6 border bg-warning">
         <div class="card-body">
-            <label for="exampleFormControlTextarea2">Text Encrypted</label>
+            <label for="exampleFormControlTextarea2">Encrypted Text</label>
             <textarea class="form-control m-3" @bind="encryptedText" id="exampleFormControlTextarea2" rows="3"></textarea>
         </div>
         
